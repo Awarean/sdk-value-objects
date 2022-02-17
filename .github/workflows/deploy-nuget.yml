@@ -20,24 +20,27 @@ jobs:
 
     steps:
       - name: Checkout Repository
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2
+        
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-      - uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+            dotnet-version: ${{ matrix.dotnet-version }} 
       - name: Install dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
       - name: Pack Project
         run:
           dotnet pack ./src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj \
           -p:PackageVersion=${{ env.PROJECT_VERSION }} \
           --no-restore --no-build
+      
       - name: Nuget Push
         run:
           dotnet nuget push ./src/Awarean.Sdk.ValueObjects/bin/Release/*.nupkg \
