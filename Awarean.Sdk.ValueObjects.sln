@@ -1,23 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{27B11BEA-8319-4378-962D-327813E8C36A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awarean.Sdk.ValueObjects", "src\Awarean.Sdk.ValueObjects\Awarean.Sdk.ValueObjects.csproj", "{20A99935-F363-407D-B555-E63E802AAD60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Awarean.Sdk.ValueObjects", "src\Awarean.Sdk.ValueObjects\Awarean.Sdk.ValueObjects.csproj", "{20A99935-F363-407D-B555-E63E802AAD60}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2FD097F2-1CED-4A0F-9E93-213DB8CC55B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awarean.Sdk.ValueObjects.Tests", "tests\Awarean.Sdk.ValueObjects.Tests\Awarean.Sdk.ValueObjects.Tests.csproj", "{17C0C383-A428-4B60-A9D6-68F0E86018BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Awarean.Sdk.ValueObjects.Tests", "tests\Awarean.Sdk.ValueObjects.Tests\Awarean.Sdk.ValueObjects.Tests.csproj", "{17C0C383-A428-4B60-A9D6-68F0E86018BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{36190717-E46A-4FBE-A969-40CB15876018}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C5552A3E-313A-4916-AA33-6DB76A3F0BD4}"
+	ProjectSection(SolutionItems) = preProject
+		deploy-nuget.yml = deploy-nuget.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{20A99935-F363-407D-B555-E63E802AAD60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -29,8 +33,15 @@ Global
 		{17C0C383-A428-4B60-A9D6-68F0E86018BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17C0C383-A428-4B60-A9D6-68F0E86018BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{20A99935-F363-407D-B555-E63E802AAD60} = {27B11BEA-8319-4378-962D-327813E8C36A}
 		{17C0C383-A428-4B60-A9D6-68F0E86018BD} = {2FD097F2-1CED-4A0F-9E93-213DB8CC55B4}
+		{C5552A3E-313A-4916-AA33-6DB76A3F0BD4} = {36190717-E46A-4FBE-A969-40CB15876018}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41E327D9-4A3B-4C1A-B4CC-55813A4AB4DA}
 	EndGlobalSection
 EndGlobal
