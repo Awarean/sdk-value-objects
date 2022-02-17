@@ -1,4 +1,16 @@
 name: project-package-nuget-deploy
+on:
+  push:
+    paths:
+      - main
+      - develop
+      - feature/*
+      - fix/*
+  pull_request:
+    paths:
+      - main
+      - develop
+      
 env:
   PROJECT_NAME: Awarean.Sdk.ValueObjects
   MAJOR_VERSION: 0
@@ -21,7 +33,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
+
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v2
         with:
