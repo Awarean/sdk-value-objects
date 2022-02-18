@@ -47,13 +47,15 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Pack Project
+        if: contains(['main', 'develop'], env.GITHUB_BASE_REF)
         run:
           dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
           --output nupkgs
-          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}.${{ env.GITHUB_RUN_NUMBER }}
+          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}.${{ env.GITHUB_RUN_NUMBER }}.${{ env.VERSION_TYPE }}
           --no-restore --no-build
 
       - name: Nuget Push
+        if: contains(['main', 'develop'], env.GITHUB_BASE_REF)
         run:
           dotnet nuget push **/nupkgs/*.nupkg
           --api-key ${{ env.NUGET_API_KEY }}
