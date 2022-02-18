@@ -6,22 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Awarean.Sdk.ValueObjects;
-public struct Currency
+public struct Money
 {
     private long amount;
     public double Amount { get => AmountAsDouble; }
-    public string Code { get; private set;} = string.Empty;
+    
+    public long AmountInCents { get => amount; }
 
-    public Currency(double amount) => this.amount = ValidAmount(amount);
-    public Currency(decimal amount) => this.amount = ValidAmount(amount);
-    public Currency(long cents) => this.amount = ValidAmount(cents);
+    public string Code { get; private set; } = string.Empty;
+
+    public Money(double amount) => this.amount = ValidAmount(amount);
+    public Money(decimal amount) => this.amount = ValidAmount(amount);
+    public Money(long cents) => this.amount = ValidAmount(cents);
 
     public void SetCode(string code) => Code = ThrowIfInvalid(code);
 
-    private static string ThrowIfInvalid(string code) => 
-        code is not null && code.Length != 3 ? code : throw new ArgumentException("Currency code should have three uppercase characters corresponding to an existing currency.", nameof(code));
+    private static string ThrowIfInvalid(string code) =>
+        code is not null && code.Length != 3 ? code : throw new ArgumentException("Money code should have three uppercase characters corresponding to an existing money.", nameof(code));
 
-    private static long ValidAmount(long amount) => amount > 0 ? amount : throw new ArgumentException("Currency amount should be greather than 0.");
+    private static long ValidAmount(long amount) => amount > 0 ? amount : throw new ArgumentException("Money amount should be greather than 0.");
 
     private static long ValidAmount(decimal amount) => ValidAmount(DecimalToLong(amount));
 
@@ -51,10 +54,10 @@ public struct Currency
 
     public override string ToString() => $"{Amount:C2}{Code}";
 
-    public static implicit operator double(Currency currency) => currency.AmountAsDouble;
-    public static implicit operator decimal(Currency currency) => currency.AmountAsDecimal;
-    public static implicit operator long(Currency currency) => currency.amount;
-    public static implicit operator Currency(decimal value) => new Currency(value);
-    public static implicit operator Currency(double value) => new Currency(value);
-    public static implicit operator Currency(long value) => new Currency(value);
+    public static implicit operator double(Money money) => money.AmountAsDouble;
+    public static implicit operator decimal(Money money) => money.AmountAsDecimal;
+    public static implicit operator long(Money money) => money.amount;
+    public static implicit operator Money(decimal value) => new Money(value);
+    public static implicit operator Money(double value) => new Money(value);
+    public static implicit operator Money(long value) => new Money(value);
 }
