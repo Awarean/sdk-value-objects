@@ -30,9 +30,6 @@ jobs:
       contents: read
 
     steps:
-      - name: Generate Project Version
-        run: export PROJECT_VERSION="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}"
-
       - name: Checkout Repository
         uses: actions/checkout@v2
       
@@ -53,7 +50,7 @@ jobs:
       - name: Pack Project
         run:
           dotnet pack ./src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj \
-          -p:PackageVersion=${{ env.PROJECT_VERSION }} \
+          -p:PackageVersion="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}" \
           --no-restore --no-build
       
       - name: Nuget Push
