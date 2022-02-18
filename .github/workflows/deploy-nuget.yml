@@ -50,7 +50,7 @@ jobs:
         run:
           dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
           --output nupkgs
-          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}
+          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}.${{ env.GITHUB_RUN_NUMBER }}
           --no-restore --no-build
 
       - name: Nuget Push
