@@ -30,9 +30,12 @@ jobs:
       contents: read
 
     steps:
+      - name: Generate Project Version
+        run: export PROJECT_VERSION="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}"
+
       - name: Checkout Repository
         uses: actions/checkout@v2
-        run: export PROJECT_VERSION="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}"
+      
 
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
