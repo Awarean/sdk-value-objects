@@ -10,7 +10,7 @@ on:
     branches:
       - main
       - develop
-      
+
 env:
   PROJECT_NAME: Awarean.Sdk.ValueObjects
   MAJOR_VERSION: 0
@@ -32,12 +32,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      
 
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
         with:
-            dotnet-version: ${{ matrix.dotnet-version }} 
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore
 
@@ -50,9 +49,9 @@ jobs:
       - name: Pack Project
         run:
           dotnet pack ./src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj \
-          -p:PackageVersion="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}" \
+          -p:PackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }} \
           --no-restore --no-build
-      
+
       - name: Nuget Push
         run:
           dotnet nuget push ./src/Awarean.Sdk.ValueObjects/bin/Release/*.nupkg \
