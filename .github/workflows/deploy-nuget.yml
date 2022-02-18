@@ -17,7 +17,7 @@ env:
   MINOR_VERSION: 0
   PATCH: 1
   NUGET_API_KEY: ${{ Secrets.NUGET_API_KEY }}
-  REGISTRY_URL: https://nuget.pkg.github.com/<owner>/index.json
+  REGISTRY_URL: https://api.nuget.org/v3/index.json
 
 jobs:
   build:
@@ -48,10 +48,13 @@ jobs:
 
       - name: Pack Project
         run:
-          dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj -p:PackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }} --no-restore --no-build
+          dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
+          --output nupkgs
+          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}
+          --no-restore --no-build
 
       - name: Nuget Push
         run:
-          dotnet nuget push ./src/Awarean.Sdk.ValueObjects/bin/Release/*.nupkg \
-          --api-key ${{env.NUGET_API_KEY}} \
-          --source ${{env.REGISTRY_URL}}
+          dotnet nuget push **/nupkgs/*.nupkg
+          --api-key ${{ env.NUGET_API_KEY }}
+          --source ${{ env.REGISTRY_URL }}
