@@ -48,9 +48,7 @@ jobs:
 
       - name: Pack Project
         run:
-          dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj \\
-          -p:PackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }} \\
-          --no-restore --no-build
+          dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj -p:PackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }} --no-restore --no-build
 
       - name: Nuget Push
         run:
