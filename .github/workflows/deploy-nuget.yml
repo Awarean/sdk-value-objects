@@ -1,13 +1,13 @@
 name: project-package-nuget-deploy
 on:
   push:
-    paths:
+    branches:
       - main
       - develop
       - feature/*
       - fix/*
   pull_request:
-    paths:
+    branches:
       - main
       - develop
       
@@ -16,7 +16,6 @@ env:
   MAJOR_VERSION: 0
   MINOR_VERSION: 0
   PATCH: 1
-  PROJECT_VERSION: "${{ MAJOR_VERSION }}.${{ MINOR_VERSION }}.{{ env.PATCH }}"
   NUGET_API_KEY: ${{ Secrets.NUGET_API_KEY }}
   REGISTRY_URL: https://nuget.pkg.github.com/<owner>/index.json
 
@@ -25,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ["3.0", "3.1.x", "5.0.x", "6.0.x"]
+        dotnet-version: ["6.0.x"]
     permissions:
       packages: write
       contents: read
@@ -33,9 +32,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        run: export PROJECT_VERSION="${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH}}"
 
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v1
         with:
             dotnet-version: ${{ matrix.dotnet-version }} 
       - name: Install dependencies
