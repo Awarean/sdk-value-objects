@@ -1,31 +1,30 @@
 name: project-package-nuget-deploy
 on:
   push:
-    paths:
+    branches:
       - main
       - develop
       - feature/*
       - fix/*
   pull_request:
-    paths:
+    branches:
       - main
       - develop
-      
+
 env:
   PROJECT_NAME: Awarean.Sdk.ValueObjects
   MAJOR_VERSION: 0
   MINOR_VERSION: 0
   PATCH: 1
-  PROJECT_VERSION: "${{ MAJOR_VERSION }}.${{ MINOR_VERSION }}.{{ env.PATCH }}"
   NUGET_API_KEY: ${{ Secrets.NUGET_API_KEY }}
-  REGISTRY_URL: https://nuget.pkg.github.com/<owner>/index.json
+  REGISTRY_URL: https://api.nuget.org/v3/index.json
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ["3.0", "3.1.x", "5.0.x", "6.0.x"]
+        dotnet-version: ["6.0.x"]
     permissions:
       packages: write
       contents: read
@@ -35,9 +34,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v1
         with:
-            dotnet-version: ${{ matrix.dotnet-version }} 
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore
 
@@ -48,13 +47,16 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Pack Project
+        if: contains(['main', 'develop'], env.GITHUB_BASE_REF)
         run:
-          dotnet pack ./src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj \
-          -p:PackageVersion=${{ env.PROJECT_VERSION }} \
+          dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
+          --output nupkgs
+          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}.${{ env.GITHUB_RUN_NUMBER }}.${{ env.VERSION_TYPE }}
           --no-restore --no-build
-      
+
       - name: Nuget Push
+        if: contains(github.ref, 'main', 'develop', 'release/*')
         run:
-          dotnet nuget push ./src/Awarean.Sdk.ValueObjects/bin/Release/*.nupkg \
-          --api-key ${{env.NUGET_API_KEY}} \
-          --source ${{env.REGISTRY_URL}}
+          dotnet nuget push **/nupkgs/*.nupkg
+          --api-key ${{ env.NUGET_API_KEY }}
+          --source ${{ env.REGISTRY_URL }}
