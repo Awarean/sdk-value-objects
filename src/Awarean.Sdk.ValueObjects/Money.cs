@@ -13,16 +13,17 @@ public struct Money
     
     public long AmountInCents { get => amount; }
 
-    public string Code { get; private set; } = string.Empty;
+    public string Currency { get; private set; } = string.Empty;
 
     public Money(double amount) => this.amount = ValidAmount(amount);
     public Money(decimal amount) => this.amount = ValidAmount(amount);
     public Money(long cents) => this.amount = ValidAmount(cents);
 
-    public void SetCode(string code) => Code = ThrowIfInvalid(code);
+    public void SetCurrency(string currency) => Currency = ThrowIfInvalid(currency);
 
-    private static string ThrowIfInvalid(string code) =>
-        code is not null && code.Length != 3 ? code : throw new ArgumentException("Money code should have three uppercase characters corresponding to an existing money.", nameof(code));
+    private static string ThrowIfInvalid(string currency) => string.IsNullOrEmpty(currency) || currency.Length != 3 
+        ? throw new ArgumentException("Money currency should have three uppercase characters corresponding to an existing currency.", nameof(currency))
+        : currency.ToUpper() ;
 
     private static long ValidAmount(long amount) => amount > 0 ? amount : throw new ArgumentException("Money amount should be greather than 0.");
 
@@ -52,7 +53,7 @@ public struct Money
         return Convert.ToInt64(casted);
     }
 
-    public override string ToString() => $"{Amount:C2}{Code}";
+    public override string ToString() => $"{Amount:C2}{Currency}";
 
     public static implicit operator double(Money money) => money.AmountAsDouble;
     public static implicit operator decimal(Money money) => money.AmountAsDecimal;

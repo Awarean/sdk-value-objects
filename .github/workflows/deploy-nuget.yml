@@ -47,7 +47,7 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Pack Project
-        if: contains(['main', 'develop'], env.GITHUB_BASE_REF)
+        if: contains(github.ref, 'refs/heads/main', 'refs/heads/develop', 'release')
         run:
           dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
           --output nupkgs
@@ -55,7 +55,7 @@ jobs:
           --no-restore --no-build
 
       - name: Nuget Push
-        if: contains(github.ref, 'main', 'develop', 'release/*')
+        if: contains(github.ref, 'refs/heads/main', 'refs/heads/develop', 'release')
         run:
           dotnet nuget push **/nupkgs/*.nupkg
           --api-key ${{ env.NUGET_API_KEY }}
