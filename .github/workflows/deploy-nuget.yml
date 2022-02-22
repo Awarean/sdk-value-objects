@@ -46,12 +46,20 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
+      - name: Set Version as PreRelease
+        if: contains(github.ref, 'refs/heads/develop')
+        run: echo "PATCH=${ env.PATCH}.beta-${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Set Version as Final
+        if: contains(github.ref, 'refs/heads/main')
+        run: echo "PATCH=${{ env.PATCH }}" >> $GITHUB_ENV
+
       - name: Pack Project
         if: contains(github.ref, 'refs/heads/main') || contains(github.ref,  'refs/heads/develop') || contains(github.ref, 'release')
         run:
           dotnet pack src/Awarean.Sdk.ValueObjects/Awarean.Sdk.ValueObjects.csproj
           --output nupkgs
-          --version-suffix ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }}.${{ env.GITHUB_RUN_NUMBER }}${{ github.run_number }}
+          "/p:Version=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH }};"
           --no-restore --no-build
 
       - name: Nuget Push
