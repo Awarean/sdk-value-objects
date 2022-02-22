@@ -1,4 +1,6 @@
-﻿namespace Awarean.Sdk.ValueObjects;
+﻿using System.Globalization;
+
+namespace Awarean.Sdk.ValueObjects;
 
 public record Money : ValueObject
 {
@@ -47,7 +49,7 @@ public record Money : ValueObject
         return Convert.ToInt64(casted);
     }
 
-    public override string ToString() => $"{Amount:C}{Currency}".Replace("$", "");
+    public override string ToString() => $"{Amount:N} {Currency}";
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

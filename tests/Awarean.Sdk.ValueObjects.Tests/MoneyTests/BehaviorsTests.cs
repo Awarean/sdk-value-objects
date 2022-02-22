@@ -79,7 +79,7 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
         {
             var money = new Money(1_199.99);
             money.SetCurrency("BRL");
-            var expected = "1,199.99BRL";
+            var expected = "1,199.99 BRL";
 
             money.ToString().Should().Be(expected);
         }
