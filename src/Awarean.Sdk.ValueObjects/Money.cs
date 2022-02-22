@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Awarean.Sdk.ValueObjects;
 
-namespace Awarean.Sdk.ValueObjects;
-public struct Money
+public record Money : ValueObject
 {
     private long amount;
     public double Amount { get => AmountAsDouble; }
-    
+
     public long AmountInCents { get => amount; }
 
     public string Currency { get; private set; } = string.Empty;
@@ -21,9 +15,9 @@ public struct Money
 
     public void SetCurrency(string currency) => Currency = ThrowIfInvalid(currency);
 
-    private static string ThrowIfInvalid(string currency) => string.IsNullOrEmpty(currency) || currency.Length != 3 
+    private static string ThrowIfInvalid(string currency) => string.IsNullOrEmpty(currency) || currency.Length != 3
         ? throw new ArgumentException("Money currency should have three uppercase characters corresponding to an existing currency.", nameof(currency))
-        : currency.ToUpper() ;
+        : currency.ToUpper();
 
     private static long ValidAmount(long amount) => amount > 0 ? amount : throw new ArgumentException("Money amount should be greather than 0.");
 
@@ -53,7 +47,13 @@ public struct Money
         return Convert.ToInt64(casted);
     }
 
-    public override string ToString() => $"{Amount:C2}{Currency}";
+    public override string ToString() => $"{Amount:C}{Currency}".Replace("$", "");
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return amount;
+        yield return Currency;
+    }
 
     public static implicit operator double(Money money) => money.AmountAsDouble;
     public static implicit operator decimal(Money money) => money.AmountAsDecimal;
