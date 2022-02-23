@@ -1,4 +1,4 @@
-namespace Awarean.Sdk.ValueObjects;
+namespace Awarean.Sdk.ValueObjects.Base;
 
 public abstract record ValueObject : IEquatable<ValueObject>
 {

@@ -84,6 +84,12 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
             money.ToString().Should().Be(expected);
         }
 
+        [Fact]
+        public void Money_Null_Object_Should_Be_an_Instance()
+        {
+            Money.Null.Should().NotBeNull();
+        }
+
         public static IEnumerable<object[]> DecimalsGenerator()
         {
             yield return new object[] { 0M };

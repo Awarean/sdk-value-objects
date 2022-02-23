@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Awarean.Sdk.ValueObjects.Base;
 
 namespace Awarean.Sdk.ValueObjects;
 
@@ -14,6 +15,7 @@ public record Money : ValueObject
     public Money(double amount) => this.amount = ValidAmount(amount);
     public Money(decimal amount) => this.amount = ValidAmount(amount);
     public Money(long cents) => this.amount = ValidAmount(cents);
+    private Money() { }
 
     public void SetCurrency(string currency) => Currency = ThrowIfInvalid(currency);
 
@@ -63,4 +65,6 @@ public record Money : ValueObject
     public static implicit operator Money(decimal value) => new Money(value);
     public static implicit operator Money(double value) => new Money(value);
     public static implicit operator Money(long value) => new Money(value);
+
+    public static readonly Money Null = new Money() { amount = -1 };
 }
