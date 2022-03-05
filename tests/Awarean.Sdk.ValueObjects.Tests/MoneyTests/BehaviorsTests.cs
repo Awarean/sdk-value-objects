@@ -16,14 +16,18 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
         [InlineData(-100)]
         public void Zero_Or_NegativeValues_Should_Throw_Argument_Exception(int value)
         {
-            Assert.Throws<ArgumentException>(() => new Money(value));
+            var action = new Action(() => new Money(value));
+
+            action.Should().Throw<ArgumentException>();
         }
 
         [Theory]
         [MemberData(nameof(DecimalsGenerator))]
         public void Zero_Or_Negative_Decimals_Should_Throw_Argument_Exception(decimal value)
         {
-            Assert.Throws<ArgumentException>(() => new Money(value));
+            var action = new Action(() => new Money(value));
+
+            action.Should().Throw<ArgumentException>();
         }
 
 
@@ -35,7 +39,10 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
         [InlineData(-100L)]
         public void Zero_Or_Negative_Doubles_Should_Throw_Argument_Exception(double value)
         {
-            Assert.Throws<ArgumentException>(() => new Money(value));
+            var action = new Action(() => new Money(value));
+
+            action.Should().Throw<ArgumentException>()
+                .WithMessage("Money amount should be greather than 0.");
         }
 
         [Theory]
@@ -48,7 +55,8 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
         {
             var action = new Action(() => new Money(10).SetCurrency(invalidCode));
 
-            action.Should().Throw<ArgumentException>();
+            action.Should().Throw<ArgumentException>()
+                .WithMessage("Money currency should have three uppercase characters corresponding to an existing currency.*");
         }
 
         [Theory]
@@ -64,6 +72,22 @@ namespace Awarean.Sdk.ValueObjects.Tests.MoneyTests
             money.SetCurrency(validCode);
 
             money.Currency.Should().BeUpperCased(validCode);
+        }
+
+        [Fact]
+        public void Money_string_Format_Should_Have_Currency_Format()
+        {
+            var money = new Money(1_199.99);
+            money.SetCurrency("BRL");
+            var expected = "1,199.99 BRL";
+
+            money.ToString().Should().Be(expected);
+        }
+
+        [Fact]
+        public void Money_Null_Object_Should_Be_an_Instance()
+        {
+            Money.Null.Should().NotBeNull();
         }
 
         public static IEnumerable<object[]> DecimalsGenerator()
