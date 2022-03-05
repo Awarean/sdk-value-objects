@@ -23,7 +23,7 @@ public record Money : ValueObject
         ? throw new ArgumentException("Money currency should have three uppercase characters corresponding to an existing currency.", nameof(currency))
         : currency.ToUpper();
 
-    private static long ValidAmount(long amount) => amount > 0 ? amount : throw new ArgumentException("Money amount should be greather than 0.");
+    private static long ValidAmount(long amount) => amount >= 0 ? amount : throw new ArgumentException("Money amount should be greather than 0.");
 
     private static long ValidAmount(decimal amount) => ValidAmount(DecimalToLong(amount));
 
