@@ -10,7 +10,7 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
         [MemberData(nameof(InvalidCpfGenerator))]
         public void Invalid_Document_Number_Should_Throw_Exception(string invalidCpf)
         {
-            var throwAction = (() =>{ Cpf cpf = invalidCpf; });
+            var throwAction = (() => { Cpf cpf = invalidCpf; });
 
             throwAction.Should().Throw<ArgumentException>().WithMessage("*is not a valid*");
         }
@@ -21,7 +21,7 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
         [InlineData(null)]
         public void Null_Empty_Whitespaced_strings_Should_Not_Create_Cpf(string invalidCpf)
         {
-            var throwAction = (() =>{ Cpf cpf = invalidCpf; });
+            var throwAction = (() => { Cpf cpf = invalidCpf; });
 
             throwAction.Should().Throw<ArgumentException>().WithMessage("*number cannot be null, empty or a whitespace*");
         }
@@ -33,6 +33,37 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
             var cpf = new Cpf(validCpf);
 
             (cpf == validCpf).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Cpf_String_Shouldnt_Have_Format()
+        {
+            var formatedCpf = "111.222.333-44";
+            var expected = "11122233344";
+
+            var cpf = new Cpf(formatedCpf);
+
+            var documentNumber = cpf.ToString();
+
+            documentNumber.Should().Be(expected);
+        }
+
+        [Fact]
+        public void Cpf_FormattedString_Shouldn_Have_Format()
+        {
+            var expected = "111.222.333-44";
+
+            var cpf = new Cpf(expected);
+
+            var documentNumber = cpf.ToFormattedString();
+
+            documentNumber.Should().Be(expected);
+        }
+
+        [Fact]
+        public void Null_Cpf_Should_Have_Invalid_Number()
+        {
+            Cpf.Null.ToString().Should().Be("00000000000");
         }
 
         public static IEnumerable<object[]> InvalidCpfGenerator()

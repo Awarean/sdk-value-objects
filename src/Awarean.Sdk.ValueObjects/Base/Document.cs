@@ -6,7 +6,7 @@ namespace Awarean.Sdk.ValueObjects.Base
     public abstract record Document
     {
         protected abstract string DocumentPatternExpression { get; }
-        protected string _value { get; set; }
+        protected string _value;
 
         public Document(string value)
         {
@@ -21,7 +21,7 @@ namespace Awarean.Sdk.ValueObjects.Base
             if (match.Success)
                 return document;
 
-            throw new ArgumentException("Document number is not a valid CPF", nameof(document));
+            throw new ArgumentException($"Document number is not a valid { this.GetType().Name }", nameof(document));
         }
 
         protected virtual string Sanitize(string document)
@@ -35,6 +35,10 @@ namespace Awarean.Sdk.ValueObjects.Base
 
             return Validate(document);
         }
+
+        public string ToFormattedString() => Format(_value);
+
+        protected abstract string Format(string value);
 
         public static implicit operator string(Document document) => document._value;
     }

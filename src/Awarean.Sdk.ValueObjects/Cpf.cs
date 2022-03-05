@@ -1,5 +1,4 @@
-using System;
-using System.Text.RegularExpressions;
+using System.Text;
 using Awarean.Sdk.ValueObjects.Base;
 
 namespace Awarean.Sdk.ValueObjects
@@ -9,16 +8,24 @@ namespace Awarean.Sdk.ValueObjects
         // Matches 11 numerical digits.
         public const string CPF_REGEX_EXPRESSION = @"^\d{11}$";
         protected override string DocumentPatternExpression => CPF_REGEX_EXPRESSION;
-        protected override string Validate(string document)
-        {
-            var regex = new Regex(CPF_REGEX_EXPRESSION);
-            var match = regex.Match(document);
 
-            if(match.Success)
-                return document;
-            
-            throw new ArgumentException("Document number is not a valid CPF", nameof(document));
+        protected sealed override string Format(string value)
+        {
+            var stringBuilder = new StringBuilder();
+            var span = value.AsSpan();
+
+            stringBuilder.Append(span.Slice(0, 3)).Append(".")
+                .Append(span.Slice(3, 3)).Append(".")
+                .Append(span.Slice(6, 3)).Append("-")
+                .Append(span.Slice(9));
+
+            return stringBuilder.ToString();
         }
+
+        private Cpf() : this("000.000.000-00") { }
+
+        public override string ToString() => _value;
+        public static readonly Cpf Null = new Cpf();
 
         public static implicit operator Cpf(string value) => new Cpf(value);
     }
