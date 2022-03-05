@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 
 namespace Awarean.Sdk.ValueObjects.Base
@@ -8,9 +7,9 @@ namespace Awarean.Sdk.ValueObjects.Base
         protected abstract string DocumentPatternExpression { get; }
         protected string _value;
 
-        public Document(string value)
+        public Document(string document)
         {
-            _value = Sanitize(value);
+            _value = Sanitize(document);
         }
 
         protected virtual string Validate(string document)
