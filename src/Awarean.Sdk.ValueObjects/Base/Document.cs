@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Awarean.Sdk.ValueObjects.Base
@@ -23,12 +24,13 @@ namespace Awarean.Sdk.ValueObjects.Base
 
         protected virtual string Sanitize(string document)
         {
-            document = string.IsNullOrEmpty(document) || string.IsNullOrWhiteSpace(document) ?
-                throw new ArgumentException("Document number cannot be null, empty or a whitespace string.")
-                : document
+            document = string.IsNullOrEmpty(document) || string.IsNullOrWhiteSpace(document) 
+                ? throw new ArgumentException("Document number cannot be null, empty or a whitespace string.")
+                : new StringBuilder(document)
                     .Replace(".", string.Empty)
                     .Replace("/", string.Empty)
-                    .Replace("-", string.Empty);
+                    .Replace("-", string.Empty)
+                    .ToString();
 
             return Validate(document);
         }
@@ -36,7 +38,7 @@ namespace Awarean.Sdk.ValueObjects.Base
         public string ToFormattedString() => Format(_value);
 
 
-        public bool Equals(string other)
+        public virtual bool Equals(string? other)
         {
             if(other.Contains("/") || other.Contains("."))
                 return ToFormattedString().Equals(other);

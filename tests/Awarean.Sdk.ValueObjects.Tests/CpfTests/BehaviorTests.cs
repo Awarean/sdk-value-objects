@@ -51,9 +51,7 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
         public void Cpf_FormattedString_Shouldn_Have_Format()
         {
             var expected = "111.222.333-44";
-
             var cpf = new Cpf(expected);
-
             var documentNumber = cpf.ToFormattedString();
 
             documentNumber.Should().Be(expected);
@@ -70,9 +68,10 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
         public void Document_Should_Be_Comparable_To_Strings(string cpfNumber)
         {
             var cpf = new Cpf(cpfNumber);
-            Predicate<Cpf> predicate = x => x ==  cpfNumber;
-            
+            Predicate<Cpf> predicate = x => x == cpfNumber;
+
             predicate.Invoke(cpf).Should().BeTrue();
+            (cpf == cpfNumber).Should().BeTrue();
         }
 
         public static IEnumerable<object[]> InvalidCpfGenerator()
