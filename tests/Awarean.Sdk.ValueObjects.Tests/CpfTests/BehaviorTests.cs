@@ -17,7 +17,6 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
 
         [Theory]
         [InlineData("")]
-        [InlineData("")]
         [InlineData(null)]
         public void Null_Empty_Whitespaced_strings_Should_Not_Create_Cpf(string invalidCpf)
         {
@@ -64,6 +63,16 @@ namespace Awarean.Sdk.ValueObjects.Tests.CpfTests
         public void Null_Cpf_Should_Have_Invalid_Number()
         {
             Cpf.Null.ToString().Should().Be("00000000000");
+        }
+
+        [Theory]
+        [MemberData(nameof(ValidCpfGenerator))]
+        public void Document_Should_Be_Comparable_To_Strings(string cpfNumber)
+        {
+            var cpf = new Cpf(cpfNumber);
+            Predicate<Cpf> predicate = x => x ==  cpfNumber;
+            
+            predicate.Invoke(cpf).Should().BeTrue();
         }
 
         public static IEnumerable<object[]> InvalidCpfGenerator()

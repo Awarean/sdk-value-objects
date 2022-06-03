@@ -2,15 +2,13 @@ using System.Text.RegularExpressions;
 
 namespace Awarean.Sdk.ValueObjects.Base
 {
-    public abstract record Document
+    public abstract record Document : IEquatable<string>
     {
+        protected abstract string Format(string value);
         protected abstract string DocumentPatternExpression { get; }
         protected string _value;
 
-        public Document(string document)
-        {
-            _value = Sanitize(document);
-        }
+        public Document(string document) => _value = Sanitize(document);
 
         protected virtual string Validate(string document)
         {
@@ -37,7 +35,14 @@ namespace Awarean.Sdk.ValueObjects.Base
 
         public string ToFormattedString() => Format(_value);
 
-        protected abstract string Format(string value);
+
+        public bool Equals(string other)
+        {
+            if(other.Contains("/") || other.Contains("."))
+                return ToFormattedString().Equals(other);
+            
+            return ToString().Equals(other);
+        }
 
         public static implicit operator string(Document document) => document._value;
     }
